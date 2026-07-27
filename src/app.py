@@ -85,7 +85,8 @@ if __name__ == "__main__":
     
     # Khởi tạo Multi-Provider LLM Adapter (Đọc từ biến môi trường LLM_PROVIDER)
     provider = get_llm_provider()
-    print(f"🔌 LLM Provider đang hoạt động: {provider.__class__.__name__}")
+    model_name = getattr(provider, "model_name", "Offline Mock Mode")
+    print(f"🔌 LLM Provider đang hoạt động: {provider.__class__.__name__} (Model: {model_name})")
     
     tests = load_test_cases()
     print(f"✅ Đã tải thành công {len(tests)} Test Cases từ config/test_cases.json\n")
