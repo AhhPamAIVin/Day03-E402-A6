@@ -5,7 +5,7 @@ duration: 240
 author: "VinUni AI Codelab × GDGoC"
 updated: "2026-07-27"
 category: "AI Agent"
-description: "Xây dựng Chatbot baseline, thiết kế Tool Specs, lắp ReAct Agent Loop với Guardrails và đánh giá so sánh trên bộ 5 Test Cases thực tế cho phòng E402."
+description: "Xây dựng Chatbot baseline, thiết kế Tool Specs, lắp ReAct Agent Loop với Guardrails và đánh giá so sánh trên bộ 5 Test Cases thực tế ."
 published: true
 collection: "codelabs"
 format: "steps"
@@ -19,16 +19,24 @@ requiredTools: ["Python 3.10+", "pip", "VS Code hoặc Editor bất kỳ", "Git"
 commonErrors: ["Nhúng sẵn kết quả tool vào system prompt của chatbot baseline", "Để model tự bịa Observation thay vì application chèn kết quả tool thực tế", "Không có max_iterations khiến agent lặp vô hạn", "Commit API key hoặc PII vào repo"]
 requiresSubmission: true
 ---
+# Lab 03 — Chatbot vs ReAct Agent 
 
-# Lab 03 — Chatbot vs ReAct Agent (Phòng E402)
-
-**AI Agent · Day 3 · ~240 phút**  
-**VinUni AI Codelab × GDGoC · Cập nhật 2026-07-27**
+**AI Agent · Day 3 · ~240 phút****VinUni AI Codelab × GDGoC · Cập nhật 2026-07-27**
 
 > **240 phút · Day 3 · intermediate.** Bạn sẽ xây một chatbot baseline, thiết kế tool contract, lắp [ReAct Agent](#glossary "Reasoning + Acting — kiến trúc agent luân phiên suy nghĩ (Thought), hành động (Action) và nhận kết quả (Observation) cho đến khi đủ bằng chứng trả lời.") và so sánh hai hệ thống trên cùng bộ test case thực tế tại phòng E402. Phần lớn bài chạy [deterministic](#glossary "Cùng input + cùng data luôn ra cùng output — không phụ thuộc model hay mạng.") — chưa cần API key phức tạp ngay từ đầu.
 
 Câu hỏi trọng tâm xuyên suốt Lab:
+
 > **Chatbot trả lời được — nhưng nó có thật sự "biết" không? Khi nào chi phí orchestration của Agent đáng giá?**
+
+### 🧩 4 Cấp Độ Tiến Hóa Của AI Hội Thoại (From Rule-Based to Autonomous Agent)
+
+| Cấp độ | Loại hệ thống | Cách hoạt động | Đánh giá & Ứng dụng trong Bài Lab |
+| :---: | :--- | :--- | :--- |
+| **Cấp 1** | **Rule-Based Bot** | Khớp từ khóa if/else cố định | Nhanh nhưng cứng nhắc, không có LLM (*Lịch sử*) |
+| **Cấp 2** | **LLM Chatbot** | Dùng LLM sinh text mượt mà | Trả lời tự nhiên nhưng không có tool ➔ **Chatbot Baseline** |
+| **Cấp 3** | **Reactive Agent** | Vòng lặp `Thought -> Action -> Observation` | Gọi tool thực tế, trích xuất dữ liệu ➔ **ReAct Agent (Trọng tâm)** |
+| **Cấp 4** | **Autonomous Agent** | Tự chia nhỏ mục tiêu (Planning) + Bộ nhớ (Memory) | Giải quyết bài toán dài hạn ➔ 🎁 **Phần Bonus Nâng cao (+10%)** |
 
 ---
 
@@ -43,6 +51,7 @@ Bạn có repo `Day-3-Lab-Chatbot-vs-react-agent-E402` trên máy, môi trườn
 Mở repo `Day-3-Lab-Chatbot-vs-react-agent-E402`, bấm **Fork** rồi clone về máy theo hướng dẫn.
 
 Cài môi trường:
+
 ```bash
 cd Day-3-Lab-Chatbot-vs-react-agent-E402
 python -m venv .venv
@@ -53,6 +62,7 @@ cp .env.example .env
 ```
 
 Smoke test:
+
 ```bash
 python src/app.py
 ```
@@ -75,13 +85,13 @@ flowchart LR
     T --> L
 ```
 
-| Thành phần | Vai trò | File phụ trách |
-| :--- | :--- | :--- |
-| **Test Cases** | Bộ đề câu hỏi từ đơn giản đến multi-step và bẫy | `config/test_cases.json` (Role 1) |
-| **Tool Registry** | Khai báo các món đồ nghề (Tools) cho AI gọi | `src/tools.py` (Role 2) |
-| **System Prompt** | Ép AI suy luận dạng Thought ➔ Action & Guardrails | `src/prompts.py` (Role 3) |
+| Thành phần               | Vai trò                                                             | File phụ trách                     |
+| :------------------------- | :------------------------------------------------------------------- | :----------------------------------- |
+| **Test Cases**       | Bộ đề câu hỏi từ đơn giản đến multi-step và bẫy         | `config/test_cases.json` (Role 1)  |
+| **Tool Registry**    | Khai báo các món đồ nghề (Tools) cho AI gọi                   | `src/tools.py` (Role 2)            |
+| **System Prompt**    | Ép AI suy luận dạng Thought ➔ Action & Guardrails                | `src/prompts.py` (Role 3)          |
 | **Agent Integrator** | Điều phối vòng lặp ReAct (`Thought -> Action -> Observation`) | `src/app.py` (Role 4 - Integrator) |
-| **Observability** | Ghi log trace để debug và làm báo cáo so sánh | `docs/trace_eval.md` (Role 5) |
+| **Observability**    | Ghi log trace để debug và làm báo cáo so sánh                 | `docs/trace_eval.md` (Role 5)      |
 
 :::checkpoint{title="Hoàn thành khi"}
 [ ] Terminal hiển thị `(.venv)`, gõ `python src/app.py` chạy thành công không báo lỗi.
@@ -90,14 +100,14 @@ flowchart LR
 :::
 
 :::caution{title="Troubleshooting — Vấn đề thường gặp"}
-`python` không tìm thấy / sai phiên bản  
-→ **Mindset**: Tách "Python nào đang chạy?" khỏi "Code đúng chưa?" — xác minh interpreter trước.  
+`python` không tìm thấy / sai phiên bản
+→ **Mindset**: Tách "Python nào đang chạy?" khỏi "Code đúng chưa?" — xác minh interpreter trước.
 → Thử `python3 --version` (cần ≥ 3.10).
 
-Lỗi Font / Encoding tiếng Việt trên Windows Terminal  
+Lỗi Font / Encoding tiếng Việt trên Windows Terminal
 → Code trong `src/app.py` đã tự động reconfigure `sys.stdout` sang `utf-8`.
 
-ModuleNotFoundError khi chạy `python src/app.py`  
+ModuleNotFoundError khi chạy `python src/app.py`
 → Kiểm tra đã activate `.venv` chưa và đứng ở thư mục gốc repo chưa.
 :::
 
@@ -112,21 +122,23 @@ Nhận ra chatbot thuần không có grounding dữ liệu thời gian thực, r
 ### Hook — Chatbot biết gì thật?
 
 Tưởng tượng hỏi Chatbot tư vấn đặt vé & thời tiết:
+
 > *"Thời tiết ở Hà Nội hôm nay thế nào và tôi nên chọn chuyến bay nào đi Hà Nội ngày mai?"*
 
 Tự trả lời: Giá vé đến từ đâu? Thời tiết có chuẩn hôm nay không? Một câu trả lời nghe hợp lý có đồng nghĩa là **grounded** (có bằng chứng thực tế) không?
 
-| Thành phần | Chatbot có trả lời? | Có evidence thật từ Tool? | Có thực hiện Action? |
-| :--- | :---: | :---: | :---: |
-| **Thời tiết thực tế** | ❌ (Chỉ bịa/chém gió) | ❌ | ❌ |
-| **Giá vé máy bay thực** | ❌ (Chỉ đưa con số ảo) | ❌ | ❌ |
-| **Tư vấn chung** | ✅ | ❌ | ❌ |
+| Thành phần                      |   Chatbot có trả lời?   | Có evidence thật từ Tool? | Có thực hiện Action? |
+| :-------------------------------- | :-------------------------: | :--------------------------: | :---------------------: |
+| **Thời tiết thực tế**   |  ❌ (Chỉ bịa/chém gió)  |              ❌              |           ❌           |
+| **Giá vé máy bay thực** | ❌ (Chỉ đưa con số ảo) |              ❌              |           ❌           |
+| **Tư vấn chung**          |             ✅             |              ❌              |           ❌           |
 
 → Chatbot có thể bịa một câu trả lời nghe rất mượt nhưng không có evidence từ database/tool. Đây là lý do ta cần ReAct Agent + Tools.
 
 ### Xây baseline trong `src/prompts.py` & `src/app.py`
 
 Baseline protocol:
+
 ```text
 system prompt + user message → một LLM call → final response (không gọi Tool)
 ```
@@ -134,6 +146,7 @@ system prompt + user message → một LLM call → final response (không gọi
 Baseline **KHÔNG** được: gọi tool, nhúng sẵn kết quả tool vào prompt, hoặc khẳng định action đã hoàn tất.
 
 **Bạn làm**:
+
 1. **Role 3**: Mở `src/prompts.py` — soạn `CHATBOT_BASELINE_PROMPT`.
 2. **Role 4**: Mở `src/app.py` — chạy hàm `run_baseline_chatbot()` trên 5 câu test trong `config/test_cases.json`.
 3. **Role 5**: Lưu phản hồi vào `docs/trace_eval.md` và phân loại output: *correct*, *safe fallback* hay *hallucinated*.
@@ -148,7 +161,7 @@ Câu hỏi của bài Lab: Khi nào chi phí orchestration của Agent đáng gi
 :::
 
 :::caution{title="Troubleshooting — Vấn đề thường gặp"}
-"Chatbot trả lời có vẻ đúng — nó đã có tool rồi à?"  
+"Chatbot trả lời có vẻ đúng — nó đã có tool rồi à?"
 → **Mindset**: Đừng tin output mượt mà — hãy kiểm tra code path. Nếu `tool_calls = 0`, đó chỉ là hallucination (ảo giác của LLM), không phải bằng chứng thực tế.
 :::
 
@@ -166,16 +179,16 @@ Nếu gắn tool chưa test vào Agent rồi Agent chạy sai ➔ Bạn không b
 
 ### Tool contract — 8 câu hỏi chuẩn
 
-| Field | Câu hỏi chuẩn hóa |
-| :--- | :--- |
-| **Name** | Tên duy nhất, rõ nghĩa? (Ví dụ: `get_weather`, `search_flights`) |
-| **Purpose** | Khi nào nên dùng, khi nào không? |
-| **Input schema** | Field nào required, type gì? (`location: str`, `origin: str`) |
-| **Output schema** | Trả về gì khi thành công? (Chuỗi JSON hoặc string rõ thông số) |
+| Field                     | Câu hỏi chuẩn hóa                                                               |
+| :------------------------ | :---------------------------------------------------------------------------------- |
+| **Name**            | Tên duy nhất, rõ nghĩa? (Ví dụ:`get_weather`, `search_flights`)           |
+| **Purpose**         | Khi nào nên dùng, khi nào không?                                               |
+| **Input schema**    | Field nào required, type gì? (`location: str`, `origin: str`)                 |
+| **Output schema**   | Trả về gì khi thành công? (Chuỗi JSON hoặc string rõ thông số)            |
 | **Error semantics** | Khi nhập sai địa điểm thì trả về gì? (Trả chuỗi báo lỗi, không crash) |
-| **Side effect** | Read-only tra cứu hay thay đổi trạng thái? |
-| **Example** | Input / Output hợp lệ mẫu? |
-| **Safety** | Có bắt lỗi crash exception không? |
+| **Side effect**     | Read-only tra cứu hay thay đổi trạng thái?                                     |
+| **Example**         | Input / Output hợp lệ mẫu?                                                       |
+| **Safety**          | Có bắt lỗi crash exception không?                                               |
 
 ### Bạn làm (Role 2 - Tool Engineer):
 
@@ -200,7 +213,7 @@ def get_weather(location: str) -> str:
 :::
 
 :::caution{title="Troubleshooting — Vấn đề thường gặp"}
-"Tool quăng ngoại lệ Exception làm dừng chương trình"  
+"Tool quăng ngoại lệ Exception làm dừng chương trình"
 → **Mindset**: Error nghiệp vụ là dữ liệu cho Agent suy luận. Trả về chuỗi thông báo lỗi dạng JSON/String để Agent đọc và chuyển hướng, không cho code Python bị crash.
 :::
 
@@ -266,12 +279,12 @@ stateDiagram-v2
 :::
 
 :::caution{title="Troubleshooting — Vấn đề thường gặp"}
-Agent lặp đi lặp lại cùng một Tool + cùng tham số  
-→ **Mindset**: Agent không tự nhận ra mình bị kẹt lặp.  
+Agent lặp đi lặp lại cùng một Tool + cùng tham số
+→ **Mindset**: Agent không tự nhận ra mình bị kẹt lặp.
 → Kiểm tra: Đã đặt `MAX_ITERATIONS` chưa? Prompt có hướng dẫn nếu tool báo lỗi thì thử cách khác không?
 
-Agent trả Final Answer quá sớm — trước khi gọi Tool  
-→ **Mindset**: Prompt chưa ép khung kỷ luật.  
+Agent trả Final Answer quá sớm — trước khi gọi Tool
+→ **Mindset**: Prompt chưa ép khung kỷ luật.
 → Thêm quy tắc vào `REACT_SYSTEM_PROMPT`: "Chỉ trả Final Answer khi đã có dữ liệu Observation từ Tool."
 :::
 
@@ -285,11 +298,11 @@ Phát hiện một failed trace (lỗi lặp vô hạn, gọi sai tên tool, nh�
 
 ### Tạo lỗi có chủ đích & Phân tích RCA (Root Cause Analysis)
 
-| Dạng lỗi (Failure Mode) | Biểu hiện thực tế | Cách Agent V2 khắc phục |
-| :--- | :--- | :--- |
-| **Unknown Tool** | AI gọi tool `search_product` không có trong danh sách | Trả về thông báo lỗi dạng: `Tool không tồn tại, các tool hợp lệ gồm: [get_weather, search_flights]` |
-| **Malformed Args** | AI truyền tham số sai cú pháp `get_weather['Hanoi'` | Xử lý parser linh hoạt hoặc trả về gợi ý cú pháp đúng |
-| **Repeated Action** | Gọi liên tục 1 tool với cùng tham số | Phanh an toàn ngắt khi chạm ngưỡng `MAX_ITERATIONS` |
+| Dạng lỗi (Failure Mode) | Biểu hiện thực tế                                      | Cách Agent V2 khắc phục                                                                                        |
+| :------------------------ | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| **Unknown Tool**    | AI gọi tool`search_product` không có trong danh sách | Trả về thông báo lỗi dạng:`Tool không tồn tại, các tool hợp lệ gồm: [get_weather, search_flights]` |
+| **Malformed Args**  | AI truyền tham số sai cú pháp`get_weather['Hanoi'`   | Xử lý parser linh hoạt hoặc trả về gợi ý cú pháp đúng                                                 |
+| **Repeated Action** | Gọi liên tục 1 tool với cùng tham số                 | Phanh an toàn ngắt khi chạm ngưỡng`MAX_ITERATIONS`                                                         |
 
 ### Bạn làm:
 
@@ -312,22 +325,22 @@ Chạy bộ Test Cases trên cả Chatbot Baseline và ReAct Agent, hoàn thiệ
 
 ### Bộ 5 Test Cases gợi ý (`config/test_cases.json`)
 
-| # | Loại câu hỏi | Mục đích kiểm tra | Kỳ vọng ở Agent |
-| :---: | :--- | :--- | :--- |
-| **1** | 🟢 Đơn giản (Chỉ lý thuyết) | Hỏi đáp thông thường | Trả lời ngay, Chatbot có thể nhanh hơn |
-| **2** | 🟢 Đơn giản (Chỉ lý thuyết) | Hỏi đáp quy định/chính sách | Trả lời ngay, không cần gọi tool |
-| **3** | 🟡 Multi-step (Cần Tool) | Đòi hỏi dữ liệu thời gian thực | Gọi đúng 1 Tool ➔ Trả lời có bằng chứng |
-| **4** | 🟡 Multi-step (Cần 2 Tools) | Phụ thuộc nhiều bước | Gọi Tool 1 ➔ Gọi Tool 2 ➔ Tổng hợp kết quả |
-| **5** | 🔴 Edge Case (Câu bẫy) | Nhập sai địa điểm / tham số vô lý | Tool báo lỗi ➔ Agent ngắt lặp an toàn bằng Guardrail |
+|      #      | Loại câu hỏi                   | Mục đích kiểm tra                     | Kỳ vọng ở Agent                                          |
+| :---------: | :-------------------------------- | :---------------------------------------- | :---------------------------------------------------------- |
+| **1** | 🟢 Đơn giản (Chỉ lý thuyết) | Hỏi đáp thông thường                | Trả lời ngay, Chatbot có thể nhanh hơn                 |
+| **2** | 🟢 Đơn giản (Chỉ lý thuyết) | Hỏi đáp quy định/chính sách        | Trả lời ngay, không cần gọi tool                       |
+| **3** | 🟡 Multi-step (Cần Tool)         | Đòi hỏi dữ liệu thời gian thực     | Gọi đúng 1 Tool ➔ Trả lời có bằng chứng            |
+| **4** | 🟡 Multi-step (Cần 2 Tools)      | Phụ thuộc nhiều bước                 | Gọi Tool 1 ➔ Gọi Tool 2 ➔ Tổng hợp kết quả          |
+| **5** | 🔴 Edge Case (Câu bẫy)          | Nhập sai địa điểm / tham số vô lý | Tool báo lỗi ➔ Agent ngắt lặp an toàn bằng Guardrail |
 
 ### Rubric đánh giá 0–2 điểm mỗi case
 
-| Tiêu chí | 0 điểm | 1 điểm | 2 điểm |
-| :--- | :--- | :--- | :--- |
-| **Factual correctness** | Sai / Bịa đặt | Đúng một phần | Đúng hoàn toàn |
-| **Grounding** | Không có bằng chứng | Bằng chứng thiếu | Trích dẫn Observation rõ ràng |
-| **Tool selection** | Gọi sai / Không gọi | Có tự sửa lỗi | Gọi đúng thứ tự tool path |
-| **Termination** | Lặp vô hạn / Crash | Dừng nhưng thừa bước | Dừng đúng lúc (Final / Guardrail) |
+| Tiêu chí                    | 0 điểm                | 1 điểm                  | 2 điểm                              |
+| :---------------------------- | :---------------------- | :------------------------ | :------------------------------------ |
+| **Factual correctness** | Sai / Bịa đặt        | Đúng một phần         | Đúng hoàn toàn                    |
+| **Grounding**           | Không có bằng chứng | Bằng chứng thiếu       | Trích dẫn Observation rõ ràng     |
+| **Tool selection**      | Gọi sai / Không gọi  | Có tự sửa lỗi         | Gọi đúng thứ tự tool path        |
+| **Termination**         | Lặp vô hạn / Crash   | Dừng nhưng thừa bước | Dừng đúng lúc (Final / Guardrail) |
 
 ### Kiểm tra Bảo mật & Nộp bài (Security Check & Submission)
 
@@ -344,14 +357,14 @@ Chạy bộ Test Cases trên cả Chatbot Baseline và ReAct Agent, hoàn thiệ
 
 ### 📋 CHECKLIST ARTIFACTS BẮT BUỘC KHI NỘP BÀI
 
-- [x] 📘 [README.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/README.md) — Tổng quan kiến trúc & Rubric chấm điểm.
-- [x] 📋 [docs/PHAN_CONG_CONG_VIEC.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/PHAN_CONG_CONG_VIEC.md) — Sổ tay phân công 5 Roles & Checklist theo mốc.
-- [x] 💡 [docs/DANH_SACH_DE_TAI.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/DANH_SACH_DE_TAI.md) — Danh sách 10 chủ đề gợi ý.
-- [x] 📊 [docs/trace_eval.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/trace_eval.md) — Báo cáo Log Trace & Bảng đánh giá Scoring Matrix.
-- [x] 🟢 [config/test_cases.json](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/config/test_cases.json) — Bộ đề Test Cases.
-- [x] 🛠️ [src/tools.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/tools.py) — Khai báo các công cụ (Role 2).
-- [x] 🧠 [src/prompts.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/prompts.py) — System Prompt ReAct & Guardrails (Role 3).
-- [x] 🚀 [src/app.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/app.py) — Core App ghép nối vòng lặp ReAct (Role 4).
+- [X] 📘 [README.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/README.md) — Tổng quan kiến trúc & Rubric chấm điểm.
+- [X] 📋 [docs/PHAN_CONG_CONG_VIEC.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/PHAN_CONG_CONG_VIEC.md) — Sổ tay phân công 5 Roles & Checklist theo mốc.
+- [X] 💡 [docs/DANH_SACH_DE_TAI.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/DANH_SACH_DE_TAI.md) — Danh sách 10 chủ đề gợi ý.
+- [X] 📊 [docs/trace_eval.md](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/docs/trace_eval.md) — Báo cáo Log Trace & Bảng đánh giá Scoring Matrix.
+- [X] 🟢 [config/test_cases.json](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/config/test_cases.json) — Bộ đề Test Cases.
+- [X] 🛠️ [src/tools.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/tools.py) — Khai báo các công cụ (Role 2).
+- [X] 🧠 [src/prompts.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/prompts.py) — System Prompt ReAct & Guardrails (Role 3).
+- [X] 🚀 [src/app.py](file:///c:/Users/Admin/Documents/VinUni/LabCoachVin/LabKeyCoach/Day-3-Lab-Chatbot-vs-react-agent-E402/src/app.py) — Core App ghép nối vòng lặp ReAct (Role 4).
 
 ---
 
