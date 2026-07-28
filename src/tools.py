@@ -34,52 +34,76 @@ QUIZ_QUESTIONS = {
 # Thông tin chi tiết từng nghề: nhóm ngành, mô tả, trình độ tối thiểu, lương, kỹ năng cần có.
 CAREER_DETAILS = {
     "Lập trình viên": {
-        "field": "công nghệ", "min_education": "cao đẳng", "salary": "15-30 triệu",
+        "field": "công nghệ", "salary": "15-30 triệu",
         "progression": "Junior -> Middle -> Senior Developer -> Tech Lead",
+        "roadmap": ["Nền tảng lập trình (Python/C)", "Cấu trúc dữ liệu & giải thuật cơ bản",
+                    "Git & làm việc nhóm", "SQL & cơ bản về Database", "Làm dự án cá nhân/thực tập"],
     },
     "Kỹ sư phần mềm": {
-        "field": "công nghệ", "min_education": "đại học", "salary": "20-40 triệu",
+        "field": "công nghệ", "salary": "20-40 triệu",
         "progression": "Fresher -> Software Engineer -> Senior Engineer -> Engineering Manager",
+        "roadmap": ["Lập trình hướng đối tượng (Java/C++)", "Cấu trúc dữ liệu & giải thuật nâng cao",
+                    "Thiết kế hệ thống cơ bản", "Kiểm thử phần mềm (Unit Test)", "Tham gia dự án lớn/thực tập"],
     },
     "Chuyên viên phân tích dữ liệu": {
-        "field": "công nghệ", "min_education": "đại học", "salary": "18-35 triệu",
+        "field": "công nghệ", "salary": "18-35 triệu",
         "progression": "Data Analyst -> Senior Analyst -> Data Scientist -> Analytics Manager",
+        "roadmap": ["SQL", "Thống kê & xác suất cơ bản", "Excel/Google Sheets nâng cao",
+                    "Công cụ trực quan hóa (Power BI/Tableau)", "Python cho phân tích dữ liệu (Pandas)"],
     },
     "Nhân viên kinh doanh": {
-        "field": "kinh doanh", "min_education": "trung học", "salary": "10-20 triệu",
+        "field": "kinh doanh", "salary": "10-20 triệu",
         "progression": "Nhân viên kinh doanh -> Trưởng nhóm kinh doanh -> Sales Manager",
+        "roadmap": ["Kỹ năng giao tiếp & thuyết trình", "Kiến thức sản phẩm/thị trường",
+                    "Kỹ năng đàm phán & chốt sale", "Sử dụng công cụ CRM cơ bản", "Thực tập/thử việc vị trí sales"],
     },
     "Chuyên viên marketing": {
-        "field": "kinh doanh", "min_education": "cao đẳng", "salary": "12-25 triệu",
+        "field": "kinh doanh", "salary": "12-25 triệu",
         "progression": "Marketing Executive -> Marketing Manager -> Marketing Director",
+        "roadmap": ["Kiến thức marketing căn bản (4P)", "Content marketing", "Marketing số (SEO/Ads cơ bản)",
+                    "Công cụ phân tích thị trường (Google Analytics)", "Thực hành 1 chiến dịch nhỏ"],
     },
     "Quản lý dự án": {
-        "field": "kinh doanh", "min_education": "đại học", "salary": "20-40 triệu",
+        "field": "kinh doanh", "salary": "20-40 triệu",
         "progression": "Coordinator -> Project Manager -> Program Manager -> PMO Director",
+        "roadmap": ["Kiến thức quản lý dự án căn bản", "Lập kế hoạch & quản lý tiến độ",
+                    "Công cụ quản lý dự án (Trello/Jira)", "Kỹ năng lãnh đạo nhóm", "Quản lý rủi ro dự án"],
     },
     "Thiết kế đồ họa": {
-        "field": "sáng tạo", "min_education": "cao đẳng", "salary": "12-25 triệu",
+        "field": "sáng tạo", "salary": "12-25 triệu",
         "progression": "Junior Designer -> Designer -> Senior Designer -> Art Director",
+        "roadmap": ["Nguyên lý thiết kế cơ bản (màu sắc, bố cục)", "Photoshop/Illustrator",
+                    "Thiết kế bộ nhận diện thương hiệu", "Xây dựng portfolio cá nhân", "Nhận dự án thực tế/freelance nhỏ"],
     },
     "Content creator": {
-        "field": "sáng tạo", "min_education": "trung học", "salary": "8-20 triệu",
+        "field": "sáng tạo", "salary": "8-20 triệu",
         "progression": "Content Creator -> Content Lead -> Creative Strategist",
+        "roadmap": ["Kỹ năng viết nội dung cơ bản", "Dựng/edit video cơ bản (CapCut/Premiere)",
+                    "Kiến thức SEO cơ bản", "Xây dựng kênh cá nhân", "Phân tích hiệu quả nội dung (insight)"],
     },
     "Đạo diễn sáng tạo": {
-        "field": "sáng tạo", "min_education": "đại học", "salary": "20-35 triệu",
+        "field": "sáng tạo", "salary": "20-35 triệu",
         "progression": "Junior Creative -> Creative Director -> Executive Creative Director",
+        "roadmap": ["Kỹ năng kể chuyện (storytelling)", "Kiến thức sản xuất hình ảnh/video",
+                    "Quản lý ê-kíp nhỏ", "Phát triển ý tưởng (concept) cho dự án", "Dẫn dắt 1 dự án sáng tạo thực tế"],
     },
     "Giáo viên": {
-        "field": "xã hội", "min_education": "đại học", "salary": "10-18 triệu",
+        "field": "xã hội", "salary": "10-18 triệu",
         "progression": "Giáo viên -> Tổ trưởng chuyên môn -> Hiệu phó/Hiệu trưởng",
+        "roadmap": ["Kiến thức chuyên môn môn giảng dạy", "Nghiệp vụ sư phạm cơ bản",
+                    "Kỹ năng soạn giáo án", "Thực hành đứng lớp/dạy thử", "Kỹ năng quản lý lớp học"],
     },
     "Chuyên viên tư vấn tâm lý": {
-        "field": "xã hội", "min_education": "đại học", "salary": "15-25 triệu",
+        "field": "xã hội", "salary": "15-25 triệu",
         "progression": "Tư vấn viên -> Chuyên viên tâm lý -> Trưởng phòng tham vấn",
+        "roadmap": ["Kiến thức tâm lý học cơ bản", "Kỹ năng lắng nghe chủ động",
+                    "Đạo đức nghề nghiệp trong tư vấn", "Thực hành tư vấn có giám sát", "Kỹ năng đánh giá/case study"],
     },
     "Nhân viên công tác xã hội": {
-        "field": "xã hội", "min_education": "cao đẳng", "salary": "9-15 triệu",
+        "field": "xã hội", "salary": "9-15 triệu",
         "progression": "Nhân viên công tác xã hội -> Điều phối viên chương trình -> Quản lý dự án cộng đồng",
+        "roadmap": ["Kiến thức công tác xã hội cơ bản", "Kỹ năng giao tiếp & hỗ trợ cộng đồng",
+                    "Quản lý ca (case management)", "Thực tập tại tổ chức xã hội", "Kỹ năng làm việc đa văn hóa"],
     },
 }
 
@@ -189,15 +213,17 @@ def get_career_profile(career_name: str) -> str:
 
 def generate_learning_roadmap(career_name: str) -> str:
     """
-    Tạo lộ trình học để theo đuổi 1 nghề cụ thể, dành cho học sinh cấp 3
-    chuẩn bị thi đại học (điểm xuất phát mặc định là chưa vào đại học).
+    Trả về lộ trình học kỹ năng thực tế, theo đúng thứ tự nên học, để phục vụ
+    tốt cho nghề này (vd: Lập trình viên -> nền tảng lập trình -> Git -> SQL...).
+    Đây là data cứng theo từng nghề cụ thể để đảm bảo thứ tự nhất quán, không
+    phải bậc học vấn (trung học/cao đẳng/đại học).
 
     Args:
         career_name (str): Tên nghề muốn theo đuổi.
 
     Returns:
-        str: Danh sách các bước (thi đỗ đúng bậc học yêu cầu, rồi rèn kỹ năng
-             chuyên môn), hoặc 'LỖI:' nếu không tìm thấy nghề.
+        str: Danh sách bước học kỹ năng theo đúng thứ tự, hoặc 'LỖI:' nếu
+             không tìm thấy nghề.
 
     Side effect: Read-only.
     """
@@ -205,13 +231,8 @@ def generate_learning_roadmap(career_name: str) -> str:
     if info is None:
         return f"LỖI: Không tìm thấy thông tin nghề nghiệp '{career_name}'."
 
-    required = info["min_education"]
-    steps = [f"Chọn khối thi/tổ hợp môn phù hợp, ôn thi để đỗ bậc '{required}'"]
-    for skill in info["skills"]:
-        steps.append(f"Rèn luyện kỹ năng '{skill}'")
-
-    step_lines = "\n".join(f"Bước {i}: {s}" for i, s in enumerate(steps, start=1))
-    return f"Lộ trình học để trở thành {name} (yêu cầu tối thiểu: {required}):\n{step_lines}"
+    steps = "\n".join(f"Bước {i}: {s}" for i, s in enumerate(info["roadmap"], start=1))
+    return f"Lộ trình học kỹ năng để làm {name}:\n{steps}"
 
 
 # Danh sách các tool được đăng ký để Agent sử dụng
