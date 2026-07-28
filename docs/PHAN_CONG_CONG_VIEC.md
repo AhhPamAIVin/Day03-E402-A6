@@ -13,7 +13,7 @@
 | **Role 3: Prompt Engineer**             | `src/prompts.py`         | Viết ReAct System Prompt & phanh Guardrails                                             | `Ngô Mạnh Minh Huy`     |
 | **Role 4: Core Developer / Integrator** | `src/app.py`             | **Đầu mối kéo code/file của nhóm (`git pull`), Vibe Code lắp ráp thành App hoàn chỉnh** | `Phạm Tuấn Anh`         |
 | **Role 5A: Trace Analyst**               | `docs/trace_eval.md`     | Lập bảng Scoring Matrix & Soi nhật ký Trace Log                                         | `Ngô Trọng Bảo`          |
-|**Role 5B: Flowchart Architect**               | `docs/trace_eval.md`     | Lập bảng Scoring Matrix & Soi nhật ký Trace Log                                         | ` Đào Bình Minh`          |
+| **Role 5B: Flowchart Architect**        | `docs/hybrid_flowchart.mermaid` | Vẽ sơ đồ Hybrid Flowchart (Chatbot path vs ReAct Agent path)                     | `Đào Bình Minh`         |
 
 _Note: Nếu nhóm 6 người, Role 5 tách thành 5A (Trace Analyst) và 5B (Flowchart Architect)._
 
@@ -77,7 +77,7 @@ _Mục tiêu: Thử thách khả năng chịu lỗi trước đòn tấn công t
 
 - [ ] ⚔️ **Đội Tấn Công (Đại diện/Học viên được gọi)**: Mang các câu test case của nhóm mình sang "xả" vào Agent của Nhóm bạn để kiểm thử khả năng chịu lỗi.
 - [ ] 🛡️ **Đội Phòng Thủ**: Quan sát Agent nhóm mình phản ứng trước câu hỏi của nhóm bạn. Kiểm tra xem Guardrail bảo vệ an toàn không.
-- [ ] 📊 **Role 5B (hoặc Role 5)**: Vẽ sơ đồ **Hybrid Flowchart** vào file `docs/hybrid_flowchart.mermaid` thể hiện phân luồng:
+- [x] 📊 **Role 5B (hoặc Role 5)**: Vẽ sơ đồ **Hybrid Flowchart** vào file `docs/hybrid_flowchart.mermaid` thể hiện phân luồng:
   - Câu hỏi đơn giản ➔ Đi đường Chatbot path.
   - Câu hỏi phức tạp ➔ Đi đường ReAct Agent path.
 - [ ] 🔄 **Đồng bộ Git Mốc 4 (Hoàn thành)**: Cả nhóm lưu file, đẩy bản hoàn chỉnh lên Git: `git add .` ➔ `git commit -m "Moc 4: Cross Audit & Hybrid Flowchart Hoan thanh"` ➔ `git push`.
