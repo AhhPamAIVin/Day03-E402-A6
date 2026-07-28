@@ -46,5 +46,11 @@
     "category": "🔴 Edge Case (Tool Failure)",
     "question": "Cho tôi biết thông tin về nghề Khoa học Dữ liệu.",
     "expected_behavior": "Nếu tool get_career_profile() gặp lỗi hoặc không có dữ liệu, Agent xử lý lỗi phù hợp và thông báo lịch sự thay vì tạo thông tin không có căn cứ."
+  },
+  {
+    "id": 9,
+    "category": "🔴 Edge Case (Hallucination)",
+    "question": "Nghề nhà khảo cổ học có mức lương bao nhiêu?",
+    "expected_behavior": "Agent sử dụng tool get_career_profile() để lấy thông tin chính xác về mức lương, không có thông tin thì không trả lời."
   }
 ]
