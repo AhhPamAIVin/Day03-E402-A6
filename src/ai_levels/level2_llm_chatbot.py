@@ -1,22 +1,72 @@
 """
-🤖 CẤP ĐỘ 2: LLM CHATBOT (Baseline Chatbot không có Tool)
-Dùng LLM sinh câu trả lời tự nhiên mượt mà, nhưng không thể truy cập dữ liệu thời gian thực.
+CẤP ĐỘ 2: OPENAI LLM CAREER CHATBOT
+
+Chatbot sinh câu trả lời tự nhiên bằng OpenAI nhưng tuyệt đối không gọi tool.
+Đây là baseline dùng để so sánh công bằng với ReAct Agent.
 """
 
-CHATBOT_BASELINE_PROMPT = """Bạn là một Chatbot tư vấn thông thường.
-Hãy trả lời câu hỏi của người dùng một cách thân thiện dựa trên kiến thức có sẵn.
-Nếu không biết thông tin thực tế thời gian thực, hãy thông báo lịch sự cho người dùng.
-"""
+from __future__ import annotations
 
-def llm_chatbot(user_input: str) -> str:
-    text = user_input.lower()
-    if "thời tiết" in text or "vé máy bay" in text:
-        return "🤖 [LLM Chatbot]: Tôi là AI hội thoại nhưng không được cấp công cụ tra cứu dữ liệu thời gian thực, nên tôi không biết chính xác thời tiết/giá vé hôm nay!"
-    else:
-        return f"🤖 [LLM Chatbot]: Rất vui được hỗ trợ bạn về câu hỏi '{user_input}'!"
+import sys
+from pathlib import Path
+from typing import Any, Iterable, Mapping
+
+SRC_DIR = Path(__file__).resolve().parent.parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+from prompts import CHATBOT_BASELINE_PROMPT
+
+
+def _format_history(history: Iterable[Mapping[str, str]] | None) -> str:
+    """Chuyển lịch sử hội thoại thành ngữ cảnh text ngắn gọn."""
+    if not history:
+        return "(Chưa có lịch sử hội thoại)"
+    lines = []
+    for message in list(history)[-8:]:
+        role = "Người dùng" if message.get("role") == "user" else "Trợ lý"
+        content = str(message.get("content", "")).strip()
+        if content:
+            lines.append(f"{role}: {content}")
+    return "\n".join(lines) or "(Chưa có lịch sử hội thoại)"
+
+
+def llm_chatbot(
+    user_input: str,
+    provider: Any,
+    history: Iterable[Mapping[str, str]] | None = None,
+) -> str:
+    """
+    Gọi đúng một lần LLM và không cung cấp bất kỳ tool nào.
+
+    Args:
+        user_input: Câu hỏi hiện tại.
+        provider: Provider có phương thức ``generate(prompt, system_prompt)``.
+        history: Lịch sử hội thoại tùy chọn để xử lý câu hỏi nối tiếp.
+
+    Returns:
+        Nội dung trả lời của OpenAI hoặc thông báo lỗi thân thiện.
+    """
+    if not isinstance(user_input, str) or not user_input.strip():
+        return "Bạn hãy nhập một câu hỏi về định hướng nghề nghiệp."
+
+    prompt = (
+        "LỊCH SỬ HỘI THOẠI GẦN ĐÂY:\n"
+        f"{_format_history(history)}\n\n"
+        "CÂU HỎI HIỆN TẠI:\n"
+        f"{user_input.strip()}\n\n"
+        "Chỉ trả lời câu hỏi hiện tại. Không được tuyên bố rằng bạn đã gọi tool "
+        "hoặc đã tra cứu dữ liệu bên ngoài."
+    )
+    response = provider.generate(prompt, system_prompt=CHATBOT_BASELINE_PROMPT)
+    if not isinstance(response, str) or not response.strip():
+        return "Mình chưa nhận được phản hồi từ OpenAI. Bạn vui lòng thử lại."
+    return response.strip()
+
 
 if __name__ == "__main__":
-    print("=== DEMO CẤP ĐỘ 2: LLM CHATBOT BASELINE ===")
-    q = "Thời tiết Hà Nội hôm nay thế nào?"
-    print(f"User: {q}")
-    print(f"Bot : {llm_chatbot(q)}")
+    from providers import get_llm_provider
+
+    openai_provider = get_llm_provider("openai")
+    print("=== DEMO CẤP ĐỘ 2: OPENAI LLM CHATBOT ===")
+    print(llm_chatbot("Ngành Công nghệ Thông tin là gì?", openai_provider))
