@@ -2,31 +2,49 @@
   {
     "id": 1,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Thủ đô của Việt Nam là gì?",
+    "question": "Ngành Công nghệ Thông tin là gì?",
     "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
   },
   {
     "id": 2,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Nêu 3 lời khuyên để học tốt lập trình.",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Nêu 3 lời khuyên để chọn ngành học phù hợp.",
+    "expected_behavior": "Chatbot đưa ra lời khuyên chung dựa trên kiến thức của LLM, không cần gọi tool."
   },
   {
     "id": 3,
     "category": "🟡 Multi-step (Cần Tool)",
-    "question": "Thời tiết ở Hà Nội hôm nay thế nào và tôi nên mặc gì đi chơi?",
-    "expected_behavior": "Agent gọi tool get_weather('Hà Nội') rồi suy luận trang phục."
+    "question": "Tôi muốn được định hướng nghề nghiệp.",
+    "expected_behavior": "Agent nhận biết người dùng muốn làm bài test, gọi tool get_quiz_questions() và hiển thị bộ câu hỏi."
   },
   {
     "id": 4,
-    "category": "🟡 Multi-step (Cần gọi 2 Tools)",
-    "question": "Kiểm tra vé máy bay từ TP.HCM đi Hà Nội ngày mai và dự báo thời tiết ở Hà Nội.",
-    "expected_behavior": "Agent gọi tool search_flights và get_weather để trả lời đầy đủ."
+    "category": "🟡 Multi-step (Cần Tool)",
+    "question": "[Câu trả lời], hãy cho tôi định hướng phù hợp",
+    "expected_behavior": "Agent gọi tool analyze_quiz_and_recommend_careers() để phân tích kết quả và trả về hướng nghề nghiệp phù hợp"
   },
   {
     "id": 5,
+    "category": "🟡 Multi-step (Cần Tool)",
+    "question": "Cho tôi biết thêm về ngành AI.",
+    "expected_behavior": "Agent sử dụng ngữ cảnh của cuộc hội thoại để xác định ngành nghề mà người dùng đang đề cập, sau đó gọi tool get_salary() và trả lời với thông tin phù hợp."
+  },
+  {
+    "id": 6,
+    "category": "🟡 Multi-step (Cần Tool + Context)",
+    "question": "Nếu chọn nghề này thì tôi nên học như thế nào?",
+    "expected_behavior": "Agent sử dụng ngữ cảnh để xác định nghề nghiệp đang được nhắc đến, sau đó gọi tool generate_learning_roadmap() để trả về lộ trình học tập phù hợp."
+  },
+  {
+    "id": 7,
     "category": "🔴 Edge Case (Bẫy Guardrail)",
-    "question": "Tra cứu thời tiết ở thành phố Atlantis ngày 32/13/2026.",
-    "expected_behavior": "Tool báo lỗi tham số/thất bại, Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
+    "question": "Viết cho tôi một bài thơ về mùa thu.",
+    "expected_behavior": "Chatbot từ chối hoặc giải thích rằng hệ thống chỉ hỗ trợ định hướng nghề nghiệp."
+  },
+  {
+    "id": 8,
+    "category": "🔴 Edge Case (Tool Failure)",
+    "question": "Cho tôi biết thông tin về nghề Khoa học Dữ liệu.",
+    "expected_behavior": "Nếu tool get_career_profile() gặp lỗi hoặc không có dữ liệu, Agent xử lý lỗi phù hợp và thông báo lịch sự thay vì tạo thông tin không có căn cứ."
   }
 ]
