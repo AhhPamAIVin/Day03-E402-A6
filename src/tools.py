@@ -35,63 +35,51 @@ QUIZ_QUESTIONS = {
 CAREER_DETAILS = {
     "Lập trình viên": {
         "field": "công nghệ", "min_education": "cao đẳng", "salary": "15-30 triệu",
-        "description": "Viết code xây dựng phần mềm, website, ứng dụng theo yêu cầu.",
-        "skills": ["Lập trình cơ bản (Python/Java)", "Cấu trúc dữ liệu & giải thuật", "Git"],
+        "progression": "Junior -> Middle -> Senior Developer -> Tech Lead",
     },
     "Kỹ sư phần mềm": {
         "field": "công nghệ", "min_education": "đại học", "salary": "20-40 triệu",
-        "description": "Thiết kế và xây dựng hệ thống phần mềm quy mô lớn, tối ưu hiệu năng.",
-        "skills": ["Thiết kế hệ thống", "Lập trình hướng đối tượng nâng cao", "Kiểm thử phần mềm"],
+        "progression": "Fresher -> Software Engineer -> Senior Engineer -> Engineering Manager",
     },
     "Chuyên viên phân tích dữ liệu": {
         "field": "công nghệ", "min_education": "đại học", "salary": "18-35 triệu",
-        "description": "Khai thác dữ liệu để tìm insight hỗ trợ ra quyết định kinh doanh.",
-        "skills": ["SQL", "Thống kê cơ bản", "Trực quan hóa dữ liệu"],
+        "progression": "Data Analyst -> Senior Analyst -> Data Scientist -> Analytics Manager",
     },
     "Nhân viên kinh doanh": {
         "field": "kinh doanh", "min_education": "trung học", "salary": "10-20 triệu",
-        "description": "Tìm kiếm khách hàng, tư vấn và chốt đơn hàng/dịch vụ.",
-        "skills": ["Kỹ năng giao tiếp", "Đàm phán", "Sử dụng CRM cơ bản"],
+        "progression": "Nhân viên kinh doanh -> Trưởng nhóm kinh doanh -> Sales Manager",
     },
     "Chuyên viên marketing": {
         "field": "kinh doanh", "min_education": "cao đẳng", "salary": "12-25 triệu",
-        "description": "Lên kế hoạch và triển khai chiến dịch quảng bá sản phẩm/thương hiệu.",
-        "skills": ["Marketing số", "Sáng tạo nội dung", "Phân tích thị trường"],
+        "progression": "Marketing Executive -> Marketing Manager -> Marketing Director",
     },
     "Quản lý dự án": {
         "field": "kinh doanh", "min_education": "đại học", "salary": "20-40 triệu",
-        "description": "Lập kế hoạch, điều phối nguồn lực, đảm bảo dự án đúng tiến độ.",
-        "skills": ["Lập kế hoạch", "Quản lý rủi ro", "Lãnh đạo nhóm"],
+        "progression": "Coordinator -> Project Manager -> Program Manager -> PMO Director",
     },
     "Thiết kế đồ họa": {
         "field": "sáng tạo", "min_education": "cao đẳng", "salary": "12-25 triệu",
-        "description": "Thiết kế hình ảnh, bộ nhận diện thương hiệu, ấn phẩm truyền thông.",
-        "skills": ["Photoshop/Illustrator", "Tư duy bố cục", "Xây dựng bộ nhận diện thương hiệu"],
+        "progression": "Junior Designer -> Designer -> Senior Designer -> Art Director",
     },
     "Content creator": {
         "field": "sáng tạo", "min_education": "trung học", "salary": "8-20 triệu",
-        "description": "Sáng tạo nội dung (video/bài viết) thu hút người xem trên mạng xã hội.",
-        "skills": ["Viết nội dung", "Dựng video cơ bản", "SEO"],
+        "progression": "Content Creator -> Content Lead -> Creative Strategist",
     },
     "Đạo diễn sáng tạo": {
         "field": "sáng tạo", "min_education": "đại học", "salary": "20-35 triệu",
-        "description": "Định hướng ý tưởng và dẫn dắt ê-kíp thực hiện các dự án sáng tạo.",
-        "skills": ["Kể chuyện bằng hình ảnh (storytelling)", "Quản lý ê-kíp sáng tạo", "Phát triển ý tưởng (concept)"],
+        "progression": "Junior Creative -> Creative Director -> Executive Creative Director",
     },
     "Giáo viên": {
         "field": "xã hội", "min_education": "đại học", "salary": "10-18 triệu",
-        "description": "Giảng dạy, truyền đạt kiến thức và hỗ trợ học sinh phát triển.",
-        "skills": ["Nghiệp vụ sư phạm", "Soạn giáo án", "Giao tiếp với học sinh"],
+        "progression": "Giáo viên -> Tổ trưởng chuyên môn -> Hiệu phó/Hiệu trưởng",
     },
     "Chuyên viên tư vấn tâm lý": {
         "field": "xã hội", "min_education": "đại học", "salary": "15-25 triệu",
-        "description": "Lắng nghe, đánh giá và hỗ trợ thân chủ giải quyết vấn đề tâm lý.",
-        "skills": ["Lắng nghe chủ động", "Kiến thức tâm lý học", "Đạo đức nghề nghiệp"],
+        "progression": "Tư vấn viên -> Chuyên viên tâm lý -> Trưởng phòng tham vấn",
     },
     "Nhân viên công tác xã hội": {
         "field": "xã hội", "min_education": "cao đẳng", "salary": "9-15 triệu",
-        "description": "Hỗ trợ cá nhân/cộng đồng yếu thế tiếp cận nguồn lực và dịch vụ xã hội.",
-        "skills": ["Kỹ năng hỗ trợ cộng đồng", "Quản lý ca (case management)", "Giao tiếp đa văn hóa"],
+        "progression": "Nhân viên công tác xã hội -> Điều phối viên chương trình -> Quản lý dự án cộng đồng",
     },
 }
 
@@ -173,18 +161,19 @@ def analyze_quiz_and_recommend_careers(answers: list) -> str:
 
 def get_career_profile(career_name: str) -> str:
     """
-    Lấy DATA CỨNG (nhóm ngành, lương, kỹ năng cần có) của 1 nghề để người
-    dùng tìm hiểu sâu hơn. Tool KHÔNG mô tả công việc hàng ngày cụ thể ra
-    sao — phần đó model tự trình bày bằng kiến thức sẵn có khi viết Final
-    Answer, kết hợp với các con số/kỹ năng grounded lấy từ Observation này.
+    Lấy CHỈ những thông tin "khó"/cần update liên tục mà LLM không nên tự
+    bịa: mức lương tham khảo và lộ trình thăng tiến. Kiến thức chung về nghề
+    (kỹ năng cần có, công việc hàng ngày, mô tả tổng quan...) KHÔNG thuộc
+    phạm vi tool này — system prompt sẽ yêu cầu model tự trả lời phần đó
+    bằng hiểu biết sẵn có, chỉ gọi tool này để lấy số liệu grounded.
 
     Args:
         career_name (str): Tên nghề (vd: 'Lập trình viên'), thường lấy từ
             danh sách trả về bởi analyze_quiz_and_recommend_careers().
 
     Returns:
-        str: Nhóm ngành + lương tham khảo + kỹ năng cần có, hoặc 'LỖI:' nếu
-             không tìm thấy nghề trong hệ thống.
+        str: Lương tham khảo + lộ trình thăng tiến, hoặc 'LỖI:' nếu không
+             tìm thấy nghề trong hệ thống.
 
     Side effect: Read-only.
     """
@@ -192,12 +181,11 @@ def get_career_profile(career_name: str) -> str:
     if info is None:
         return f"LỖI: Không tìm thấy thông tin nghề nghiệp '{career_name}'."
 
-    skills = ", ".join(info["skills"])
     return (
-        f"{name} (nhóm '{info['field']}')\n"
-        f"Lương tham khảo: {info['salary']}\n"
-        f"Kỹ năng cần có: {skills}"
+        f"{name} — Lương tham khảo: {info['salary']}\n"
+        f"Lộ trình thăng tiến: {info['progression']}"
     )
+
 
 def generate_learning_roadmap(career_name: str) -> str:
     """
