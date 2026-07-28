@@ -54,9 +54,19 @@ def _extract_final_answer(model_output: str) -> str | None:
     return match.group(1).strip() if match else None
 
 
-def _parse_scalar(raw_value: str) -> str:
+def _remove_named_argument(raw_value: str, expected_name: str) -> str:
+    """Bỏ tiền tố ``name=`` nếu model dùng cú pháp keyword argument."""
+    match = re.match(
+        rf"^\s*{re.escape(expected_name)}\s*=\s*(?P<value>.+)\s*$",
+        raw_value,
+        flags=re.S,
+    )
+    return match.group("value") if match else raw_value
+
+
+def _parse_scalar(raw_value: str, expected_name: str) -> str:
     """Parse chuỗi có/không có dấu nháy mà không dùng eval nguy hiểm."""
-    value = raw_value.strip()
+    value = _remove_named_argument(raw_value, expected_name).strip()
     if not value:
         raise ValueError("Tool đang thiếu tham số.")
     try:
@@ -70,7 +80,7 @@ def _parse_scalar(raw_value: str) -> str:
 
 def _parse_answers(raw_value: str) -> list[Any]:
     """Chấp nhận cả tool[[1,...]] và tool[1,2,...]."""
-    value = raw_value.strip()
+    value = _remove_named_argument(raw_value, "answers").strip()
     if not value:
         raise ValueError("Tool chấm điểm đang thiếu danh sách answers.")
     try:
@@ -123,11 +133,11 @@ def _extract_action(model_output: str) -> tuple[str, dict[str, Any]]:
     tool_name = bracket_match.group("tool")
     raw_args = bracket_match.group("args")
     if tool_name == "get_quiz_question":
-        arguments = {"group_name": _parse_scalar(raw_args)}
+        arguments = {"group_name": _parse_scalar(raw_args, "group_name")}
     elif tool_name == "analyze_quiz_and_recommend_careers":
         arguments = {"answers": _parse_answers(raw_args)}
     elif tool_name in {"get_career_profile", "generate_learning_roadmap"}:
-        arguments = {"career_name": _parse_scalar(raw_args)}
+        arguments = {"career_name": _parse_scalar(raw_args, "career_name")}
     else:
         # Giữ raw argument để executor trả lỗi unknown-tool có căn cứ.
         arguments = {"argument": raw_args.strip()}

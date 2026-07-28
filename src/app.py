@@ -880,21 +880,25 @@ class CareerDesktopApp:
         self._send_message()
 
 
-def launch_desktop_ui(provider: Any, configured: bool, config_message: str) -> int:
-    """Khởi chạy GUI; trả mã lỗi rõ ràng nếu máy không có tkinter/display."""
-    try:
-        import tkinter as tk
-    except ImportError:
-        print("Không tìm thấy tkinter. Hãy cài Python có hỗ trợ Tcl/Tk.")
-        return 1
-    try:
-        root = tk.Tk()
-    except tk.TclError as exc:
-        print(f"Không thể mở giao diện desktop: {exc}")
-        return 1
-    CareerDesktopApp(root, provider, configured, config_message)
-    root.mainloop()
-    return 0
+def launch_web_interface(
+    provider: Any,
+    configured: bool,
+    config_message: str,
+    host: str,
+    port: int,
+    open_browser: bool,
+) -> int:
+    """Khởi chạy giao diện web chatbot cục bộ."""
+    from ai_levels.web_chat_ui import launch_web_ui
+
+    return launch_web_ui(
+        provider=provider,
+        configured=configured,
+        config_message=config_message,
+        host=host,
+        port=port,
+        open_browser=open_browser,
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -903,7 +907,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--mode",
         choices=("ui", "chat", "demo", "tests", "tools"),
         default="ui",
-        help="ui: giao diện; chat: CLI; demo: 4 cấp; tests: test cases; tools: test tool",
+        help="ui: web chatbot; chat: CLI; demo: 4 cấp; tests: test cases; tools: test tool",
     )
     parser.add_argument("--level", type=int, choices=(1, 2, 3, 4), default=3)
     parser.add_argument(
@@ -912,6 +916,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Câu hỏi dùng cho mode demo",
     )
     parser.add_argument("--no-trace", action="store_true", help="Ẩn trace khi chạy test cases")
+    parser.add_argument("--host", default="127.0.0.1", help="Địa chỉ web server cục bộ")
+    parser.add_argument("--port", type=int, default=8000, help="Cổng web server")
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Không tự mở trình duyệt khi chạy giao diện web",
+    )
     return parser
 
 
@@ -923,7 +934,14 @@ def main() -> int:
     provider = create_openai_provider()
     configured, message = validate_openai_configuration(provider)
     if args.mode == "ui":
-        return launch_desktop_ui(provider, configured, message)
+        return launch_web_interface(
+            provider,
+            configured,
+            message,
+            host=args.host,
+            port=args.port,
+            open_browser=not args.no_browser,
+        )
 
     print("=" * 72)
     print("AI ĐỊNH HƯỚNG NGHỀ NGHIỆP — CHATBOT VS REACT AGENT")
